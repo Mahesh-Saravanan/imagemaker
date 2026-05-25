@@ -43,8 +43,11 @@ export default function ImageCell({ slot, onUpdate, onReplace, onRemove }: Image
 
         if (mode === "pan") {
           const deltaY = ev.clientY - dragStartY.current;
-          // Pan image: change yOffset (vertical offset in pixels)
-          onUpdate(slot.id, { yOffset: dragStartVal.current - deltaY });
+          // Calculate rendered image height
+          const renderedImageHeight = container.clientWidth * (slot.naturalHeight / slot.naturalWidth);
+          // Convert deltaY to a percentage of the image height
+          const deltaYPercent = (deltaY / renderedImageHeight) * 100;
+          onUpdate(slot.id, { yOffset: dragStartVal.current - deltaYPercent });
         } else if (mode === "cropTop") {
           const clientY = ev.clientY;
           const pct = Math.max(0, Math.min(slot.cropBottom - 2, ((clientY - rect.top) / rect.height) * 100));
@@ -65,7 +68,7 @@ export default function ImageCell({ slot, onUpdate, onReplace, onRemove }: Image
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
     },
-    [slot.id, slot.url, slot.yOffset, slot.cropTop, slot.cropBottom, onUpdate]
+    [slot.id, slot.url, slot.yOffset, slot.cropTop, slot.cropBottom, slot.naturalHeight, slot.naturalWidth, onUpdate]
   );
 
   const handleFileChange = useCallback(
@@ -83,7 +86,7 @@ export default function ImageCell({ slot, onUpdate, onReplace, onRemove }: Image
           naturalHeight: img.naturalHeight,
           cropTop: 0,
           cropBottom: 100,
-          yOffset: 0,
+          yOffset: 0, // yOffset is now a percentage (0%)
         });
       };
       img.src = url;
@@ -130,7 +133,7 @@ export default function ImageCell({ slot, onUpdate, onReplace, onRemove }: Image
       {/* 
         Image container with overflow-hidden is inside the cell.
         Image width: 100% ensures no horizontal cropping.
-        Its vertical position is determined by yOffset translation.
+        Its vertical position is determined by yOffset translation (percentage based for print scaling).
       */}
       <div className="absolute inset-0 flex items-start justify-center">
         <img
@@ -139,7 +142,7 @@ export default function ImageCell({ slot, onUpdate, onReplace, onRemove }: Image
           draggable={false}
           className="w-full pointer-events-none select-none"
           style={{
-            transform: `translateY(-${slot.yOffset}px)`,
+            transform: `translateY(-${slot.yOffset}%)`,
           }}
           onMouseDown={(e) => handleMouseDown(e, "pan")}
         />
