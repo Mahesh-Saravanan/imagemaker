@@ -140,9 +140,10 @@ export default function ImageCell({ slot, onUpdate, onReplace, onRemove }: Image
           src={slot.url}
           alt=""
           draggable={false}
-          className="w-full pointer-events-none select-none"
+          className="w-full pointer-events-none select-none contrast-[1.05] saturate-[1.05]"
           style={{
             transform: `translateY(-${slot.yOffset}%)`,
+            imageRendering: "-webkit-optimize-contrast" as React.CSSProperties["imageRendering"],
           }}
           onMouseDown={(e) => handleMouseDown(e, "pan")}
         />
