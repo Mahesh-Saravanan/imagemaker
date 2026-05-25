@@ -129,7 +129,7 @@ export default function Home() {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col relative h-screen overflow-hidden">
+      <div className="flex-1 flex flex-col relative overflow-auto pt-4">
         {/* Top Right Action Buttons (Hidden in print) */}
         <div className="no-print absolute top-6 right-8 z-50 flex items-center gap-5">
           <button
