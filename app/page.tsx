@@ -117,7 +117,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[var(--surface)] font-sans relative">
+    <div className="flex min-h-screen overflow-y-auto bg-[var(--surface)] font-sans relative pt-4">
       <ControlPanel
         grid={grid}
         gap={gap}
