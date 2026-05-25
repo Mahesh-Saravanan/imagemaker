@@ -5,8 +5,8 @@ echo ==========================================
 echo Updating SKTC Image Maker from GitHub...
 echo ==========================================
 
-:: Change directory to the folder where this .bat file is located
-cd /d "%~dp0"
+:: Change directory to the absolute path of the project on the Windows machine
+cd /d "C:\Users\SKTC\Documents\imagemaker"
 
 echo Pulling latest changes...
 git fetch --all
